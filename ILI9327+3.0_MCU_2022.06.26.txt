@@ -1,0 +1,109 @@
+void LCD_Init(void)
+{
+
+	SPI_RES = 1;
+	Delay(800);
+	
+	SPI_RES = 0;
+	Delay(500);
+	SPI_RES = 1;
+	Delay(800);
+
+//************* Start Initial Sequence **********//
+
+//VCI=3.3V
+
+  SPI_WriteComm(0xE9);
+  SPI_WriteData(0x20);
+  
+  SPI_WriteComm(0x11); //Exit Sleep
+  Delay(100); 
+
+#if 1   //VCI=3.3V  
+  
+  SPI_WriteComm(0xD0); //Power_Setting
+  SPI_WriteData(0x01); //VCI1=0.9*VCI=2.97V
+  SPI_WriteData(0x03); //DDVDH=2*VCI1=5.94V,VGH=5*VCI1=14.85V,VGL=-3*VCI1=8.97V
+  SPI_WriteData(0x02); //VCILVL=VCI=3.3V,VREG1OUT=1.65*VCILVL=5.445V
+  
+  SPI_WriteComm(0xD1); //VCOM Control
+  SPI_WriteData(0x00); //SELVCM=0 D1 for VCOM
+  SPI_WriteData(0x52); //VCM[6:0] VCOMH=0.82*VREG1OUT
+  SPI_WriteData(0x18); //VDC[4:0] VCOM
+
+#else //VCI=2.8V
+
+  SPI_WriteComm(0xD0); //Power_Setting
+  SPI_WriteData(0x07); //VCI1=1.0*VCI=2.8V
+  SPI_WriteData(0x03); //DDVDH=2*VCI1=5.6V,VGH=5*VCI1=14V,VGL=-3*VCI1=8.4V
+  SPI_WriteData(0x0E); //VCILVL=VCI=2.8V,VREG1OUT=1.95*VCILVL=5.46V
+  
+  SPI_WriteComm(0xD1); //VCOM Control
+  SPI_WriteData(0x00); //SELVCM=0 D1 for VCOM
+  SPI_WriteData(0x52); //VCM[6:0] VCOMH=0.82*VREG1OUT
+  SPI_WriteData(0x18); //VDC[4:0] VCOM
+
+#endif
+
+  SPI_WriteComm(0x36);
+  SPI_WriteData(0x08);
+  
+  SPI_WriteComm(0x3A);
+  SPI_WriteData(0x55);
+  
+  SPI_WriteComm(0xC1); //Display_Timing_Setting for Normal/Partial Mode
+  SPI_WriteData(0x10);
+  SPI_WriteData(0x10);
+  SPI_WriteData(0x02);
+  SPI_WriteData(0x02);
+  
+  SPI_WriteComm(0xC0); //Set Default Gamma
+  SPI_WriteData(0x10);
+  SPI_WriteData(0x35);
+  SPI_WriteData(0x00);
+  SPI_WriteData(0x00);
+  SPI_WriteData(0x01);
+  SPI_WriteData(0x02);
+  
+  SPI_WriteComm(0xC5); //Set frame rate
+  SPI_WriteData(0x02);
+  
+  SPI_WriteComm(0xD2); //power setting
+  SPI_WriteData(0x01);
+  SPI_WriteData(0x22);
+  
+  SPI_WriteComm(0xC8); //Set Gamma
+  SPI_WriteData(0x00);
+  SPI_WriteData(0x56);
+  SPI_WriteData(0x45);
+  SPI_WriteData(0x04);
+  SPI_WriteData(0x03);
+  SPI_WriteData(0x01);
+  SPI_WriteData(0x23);
+  SPI_WriteData(0x12);
+  SPI_WriteData(0x77);
+  SPI_WriteData(0x40);
+  SPI_WriteData(0x09);
+  SPI_WriteData(0x06);
+  SPI_WriteData(0x88);
+  SPI_WriteData(0x88);
+  SPI_WriteData(0x88);
+  
+  SPI_WriteComm(0x2A);
+  SPI_WriteData(0x00);
+  SPI_WriteData(0x00);
+  SPI_WriteData(0x00);
+  SPI_WriteData(0xEF);
+
+  SPI_WriteComm(0x2B);
+  SPI_WriteData(0x00);
+  SPI_WriteData(0x00);
+  SPI_WriteData(0x01);
+  SPI_WriteData(0x8F);  
+ 
+  SPI_WriteComm(0x29); //display on
+  
+  SPI_WriteComm(0x2C);
+	
+	
+}
